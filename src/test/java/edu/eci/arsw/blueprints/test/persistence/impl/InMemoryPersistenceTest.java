@@ -10,8 +10,10 @@ import edu.eci.arsw.blueprints.model.Point;
 import edu.eci.arsw.blueprints.persistence.BlueprintNotFoundException;
 import edu.eci.arsw.blueprints.persistence.BlueprintPersistenceException;
 import edu.eci.arsw.blueprints.persistence.impl.InMemoryBlueprintPersistence;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
+import java.util.HashSet;
+import java.util.Set;
+
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -65,10 +67,26 @@ public class InMemoryPersistenceTest {
         catch (BlueprintPersistenceException ex){
             
         }
-                
-        
+
+    }
+
+    @Test
+    public void saveAndLoadBluePrintByAuthor() throws BlueprintPersistenceException {
+        InMemoryBlueprintPersistence ibpp=new InMemoryBlueprintPersistence();
+
+        Point[] pts0=new Point[]{new Point(40, 40),new Point(15, 15)};
+        Blueprint bp0=new Blueprint("mack", "mypaint",pts0);
+        ibpp.saveBlueprint(bp0);
+        Point[] pts1=new Point[]{new Point(40, 40),new Point(15, 15)};
+        Blueprint bp1=new Blueprint("mack", "mypaint2",pts1);
+        ibpp.saveBlueprint(bp1);
+        Set<Blueprint> blueprintSet = new HashSet<Blueprint> ();
+        blueprintSet.add(bp0);
+        blueprintSet.add(bp1);
+
+        assertEquals (ibpp.getBluePrintsByAuthor ("mack"),blueprintSet);
+
     }
 
 
-    
 }
